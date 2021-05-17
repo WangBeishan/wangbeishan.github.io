@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.beishan.cf","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="爲什麼俺想寫一個類似weibo的網站呢？  想在實踐中學習，看看自己能否寫出一點好玩的東西 俺很尊敬的一個人他也寫了一個，給了俺思路 好玩，彷彿自己的賽博之地。沒有刪貼、沒有禁言、沒有消失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何寫一個類似weibo的網站">
+<meta property="og:url" content="http://blog.beishan.cf/2021/05/17/%E5%A6%82%E4%BD%95%E5%AF%AB%E4%B8%80%E5%80%8B%E9%A1%9E%E4%BC%BCweibo%E7%9A%84%E7%B6%B2%E7%AB%99/index.html">
+<meta property="og:site_name" content="wbs&#96;blog">
+<meta property="og:description" content="爲什麼俺想寫一個類似weibo的網站呢？  想在實踐中學習，看看自己能否寫出一點好玩的東西 俺很尊敬的一個人他也寫了一個，給了俺思路 好玩，彷彿自己的賽博之地。沒有刪貼、沒有禁言、沒有消失">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-05-17T15:05:02.611Z">
+<meta property="article:modified_time" content="2021-05-17T15:05:02.611Z">
+<meta property="article:author" content="wbs">
+<meta property="article:tag" content="springboot">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://blog.beishan.cf/2021/05/17/%E5%A6%82%E4%BD%95%E5%AF%AB%E4%B8%80%E5%80%8B%E9%A1%9E%E4%BC%BCweibo%E7%9A%84%E7%B6%B2%E7%AB%99/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>如何寫一個類似weibo的網站 | wbs`blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">wbs`blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">十年之計，莫如樹木</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">1</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">2</span></a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://blog.beishan.cf/2021/05/17/%E5%A6%82%E4%BD%95%E5%AF%AB%E4%B8%80%E5%80%8B%E9%A1%9E%E4%BC%BCweibo%E7%9A%84%E7%B6%B2%E7%AB%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="wbs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wbs`blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何寫一個類似weibo的網站
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-17 11:05:02" itemprop="dateCreated datePublished" datetime="2021-05-17T11:05:02-04:00">2021-05-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>爲什麼俺想寫一個類似weibo的網站呢？</strong></p>
+<ol>
+<li>想在實踐中學習，看看自己能否寫出一點好玩的東西</li>
+<li>俺很尊敬的一個人他也寫了一個，給了俺思路</li>
+<li>好玩，彷彿自己的賽博之地。沒有刪貼、沒有禁言、沒有消失 </li>
+</ol>
+<span id="more"></span>
+
+<h2 id="準備工作"><a href="#準備工作" class="headerlink" title="準備工作"></a>準備工作</h2><p>創建springboot項目，<a target="_blank" rel="noopener" href="https://start.spring.io/">網址</a></p>
+<p>添加各種依賴。依賴詳情參見pom.xml文件</p>
+<h3 id="數據庫表的創建"><a href="#數據庫表的創建" class="headerlink" title="數據庫表的創建"></a>數據庫表的創建</h3><p>創建數據庫表</p>
+<p>user：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `user` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(40) NOT NULL,</span><br><span class="line">  `email` varchar(60) NOT NULL,</span><br><span class="line">  `password` varchar(40) NOT NULL,</span><br><span class="line">  `crt_time` datetime NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</span><br></pre></td></tr></table></figure>
+
+<p>micropost：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `micropost` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `user_id` int(11) NOT NULL,</span><br><span class="line">  `content` text NOT NULL,</span><br><span class="line">  `crt_time` datetime NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</span><br></pre></td></tr></table></figure>
+
+
+
+<p>最初計劃實現關注功能，所以後期可能表會修改並且添加新的表，先留坑。</p>
+<h2 id="1、創建eneity-amp-mapper以及Mybatis映射"><a href="#1、創建eneity-amp-mapper以及Mybatis映射" class="headerlink" title="1、創建eneity&amp;mapper以及Mybatis映射"></a>1、創建eneity&amp;mapper以及Mybatis映射</h2><p>首先創建實體類以及mapper類，代碼可以查看<a target="_blank" rel="noopener" href="https://github.com/WangBeishan/microposts">Github</a></p>
+<p>mybatis映射xml文件目錄必須與src文件mapper文件目錄結構相同，如圖：</p>
+<p>![src](/home/wbs/Pictures/Screenshot from 2021-03-31 20-57-00.png)</p>
+<p>![resources](/home/wbs/Pictures/Screenshot from 2021-03-31 20-57-15.png)</p>
+<h2 id="2、service-amp-controller編寫"><a href="#2、service-amp-controller編寫" class="headerlink" title="2、service &amp; controller編寫"></a>2、service &amp; controller編寫</h2><p>控制層這塊其實挺迷糊的，寫這篇博文的目的之一也是想屢屢知識點。</p>
+<p>而service層，由於暫時業務上更改需求不高，暫時沒領會到service層的必要性，不過都成了「傳統」，俺也先這麼寫。</p>
+<p>控制層這塊開始想分成幾個類來寫，分別實現不同類的功能，比如用戶控制類，博文控制類，系統控制類等。</p>
+<p>現在所採用的方式是通過servlet接受發送請求。由於前端頁面需要判斷登錄狀態，所以在登錄成功后，後臺會創建一個新的session（假如沒有的話），通過每次請求session判斷該用戶是否已登錄來展示不同的html標籤。</p>
+<p>登出功能就是從session里remove記錄的值。</p>
+<p>用戶和博文控制暫時實現了基本的增刪功能。</p>
+<h2 id="3、攔截器配置"><a href="#3、攔截器配置" class="headerlink" title="3、攔截器配置"></a>3、攔截器配置</h2><p>用戶未登錄前無法獲取某些請求和頁面，如獲取所有用戶等。</p>
+<p>登錄攔截器：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginInterceptor</span> <span class="keyword">implements</span> <span class="title">HandlerInterceptor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">preHandle</span><span class="params">(HttpServletRequest request, HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        HttpSession session = request.getSession();</span><br><span class="line">        Object userId = session.getAttribute(<span class="string">&quot;userId&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">null</span> == userId) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>WebMvcConfig配置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WebMvcConfig</span> <span class="keyword">implements</span> <span class="title">WebMvcConfigurer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addInterceptors</span><span class="params">(InterceptorRegistry registry)</span> </span>&#123;</span><br><span class="line">        registry.addInterceptor(<span class="keyword">new</span> LoginInterceptor())</span><br><span class="line">                .addPathPatterns(<span class="string">&quot;/**&quot;</span>)</span><br><span class="line">                .excludePathPatterns(<span class="string">&quot;/login&quot;</span>, <span class="string">&quot;/&quot;</span>, <span class="string">&quot;/index&quot;</span>, <span class="string">&quot;/about&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/contact&quot;</span>, <span class="string">&quot;/signupStatus&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/loginStatus&quot;</span>, <span class="string">&quot;/login&quot;</span>, <span class="string">&quot;/signup&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/help&quot;</span>, <span class="string">&quot;/css/**&quot;</span>, <span class="string">&quot;/images/**&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4、分頁功能"><a href="#4、分頁功能" class="headerlink" title="4、分頁功能"></a>4、分頁功能</h2><p>對博文和所有用戶列表進行分頁，在pom.xml中添加以下依賴：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.github.pagehelper<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>pagehelper-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>項目<a target="_blank" rel="noopener" href="https://github.com/pagehelper/Mybatis-PageHelper">Github</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/microposts&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getAllPM</span><span class="params">(Model model,</span></span></span><br><span class="line"><span class="params"><span class="function">                         <span class="meta">@RequestParam(required = false, defaultValue = &quot;1&quot;, value = &quot;pageNum&quot;)</span> Integer pageNum,</span></span></span><br><span class="line"><span class="params"><span class="function">                         <span class="meta">@RequestParam(defaultValue = &quot;10&quot;, value = &quot;pageSize&quot;)</span> Integer pageSize,</span></span></span><br><span class="line"><span class="params"><span class="function">                         HttpServletResponse response)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (pageNum == <span class="keyword">null</span> || pageNum &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            pageNum = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (pageSize == <span class="keyword">null</span>) &#123;</span><br><span class="line">            pageSize = <span class="number">10</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        PageHelper.startPage(pageNum, pageSize);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List&lt;Micropost&gt; microposts = micropostService.getAllMP();</span><br><span class="line">            PageInfo&lt;Micropost&gt; pageInfo = <span class="keyword">new</span> PageInfo&lt;&gt;(microposts);</span><br><span class="line">            model.addAttribute(<span class="string">&quot;pageInfo&quot;</span>, pageInfo);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            PageHelper.clearPage();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>以此方法爲例，主要有兩個參數：</p>
+<p>pageNum：顯示的頁數（不是必須）</p>
+<p>pageSize：每頁顯示多少條博文</p>
+<p>將PageInfo添加到model里，前端就可以訪問了。更詳細用法參見<a target="_blank" rel="noopener" href="https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/en/HowToUse.md">這裏</a>    </p>
+<h2 id="後記"><a href="#後記" class="headerlink" title="後記"></a>後記</h2><p>前端以model的方式從後端獲取數據，css還未寫，暫時只是簡單的界面。</p>
+<p>後續可能會添加的東西：</p>
+<p>註冊時郵箱的驗證、css樣式、關注與被關注功能、主頁隨機獲取未關注者的博文</p>
+<p>暫時就這麼多，挖個坑，希望可以完成。</p>
+<p>項目Github地址：<a target="_blank" rel="noopener" href="https://github.com/WangBeishan/microposts">microposts</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/springboot/" rel="tag"># springboot</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/17/%E8%A5%BF%E5%8C%97%E5%BE%80%E8%A5%BF%EF%BC%8C%E5%9B%9B%E6%9C%88%E9%81%8A%E8%A8%98/" rel="prev" title="西北往西，四月遊記">
+      <i class="fa fa-chevron-left"></i> 西北往西，四月遊記
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%96%E5%82%99%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">準備工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B8%E6%93%9A%E5%BA%AB%E8%A1%A8%E7%9A%84%E5%89%B5%E5%BB%BA"><span class="nav-number">1.1.</span> <span class="nav-text">數據庫表的創建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E3%80%81%E5%89%B5%E5%BB%BAeneity-amp-mapper%E4%BB%A5%E5%8F%8AMybatis%E6%98%A0%E5%B0%84"><span class="nav-number">2.</span> <span class="nav-text">1、創建eneity&amp;mapper以及Mybatis映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2%E3%80%81service-amp-controller%E7%B7%A8%E5%AF%AB"><span class="nav-number">3.</span> <span class="nav-text">2、service &amp; controller編寫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E3%80%81%E6%94%94%E6%88%AA%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">3、攔截器配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E3%80%81%E5%88%86%E9%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">4、分頁功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%8C%E8%A8%98"><span class="nav-number">6.</span> <span class="nav-text">後記</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">wbs</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WangBeishan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;WangBeishan" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangbeishan9527@gmail.com" title="E-Mail → mailto:wangbeishan9527@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wbs</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
